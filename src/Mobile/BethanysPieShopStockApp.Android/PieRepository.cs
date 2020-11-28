@@ -22,8 +22,8 @@ namespace BethanysPieShopStockApp.Droid
         {
             _pieAsmxService = new BethanysPieShopRemoteServices.PieAsmxService
             {
-                Url = "https://bethanyspieshopstockappasmxservice.azurewebsites.net/PieAsmxService.asmx"
-                //Url = "http://10.0.2.2:49212/PieAsmxService.asmx" 
+                //Url = "https://bethanyspieshopstockappasmxservice.azurewebsites.net/PieAsmxService.asmx"
+                Url = "https://localhost:44304/PieAsmxService.asmx" 
             };
 
             _pieAsmxService.GetAllPiesCompleted += PieAsmxService_GetAllPiesCompleted;
@@ -45,10 +45,10 @@ namespace BethanysPieShopStockApp.Droid
         {
             try
             {
-                if (getAllPiesRequestComplete != null)
-                {
+                //if (getAllPiesRequestComplete != null)
+                //{
                     getAllPiesRequestComplete = new TaskCompletionSource<bool>();
-                }
+                //}
                
 
                 Pies = new List<Pie>();
@@ -78,10 +78,10 @@ namespace BethanysPieShopStockApp.Droid
         {
             try
             {
-                if (getPieByIdRequestComplete != null)
-                {
+                //if (getPieByIdRequestComplete != null)
+                //{
                     getPieByIdRequestComplete = new TaskCompletionSource<bool>();
-                }
+                //}
                 
 
                 Pie = ConvertToLocalPie(e.Result);
