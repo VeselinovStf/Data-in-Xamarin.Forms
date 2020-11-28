@@ -24,7 +24,7 @@ namespace BethanysPieShopStockApp.Services
             await _pieRepository.DeletePieAsync(id);
         }
 
-        public async Task<List<Pie>> GetAllPiesAsync()
+        public async Task<List<Pie>> GetAllPiesAsync(bool force)
         {
             return await _pieRepository.GetAllPiesAsync();
         }

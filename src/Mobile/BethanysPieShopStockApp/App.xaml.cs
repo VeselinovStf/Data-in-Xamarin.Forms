@@ -1,4 +1,5 @@
-﻿using BethanysPieShopStockApp.Services;
+﻿using BethanysPieShopStockApp.Models;
+using BethanysPieShopStockApp.Services;
 using BethanysPieShopStockApp.Utility;
 using BethanysPieShopStockApp.Views;
 using Xamarin.Forms;
@@ -8,7 +9,8 @@ namespace BethanysPieShopStockApp
     public partial class App : Application
     {
         public static NavigationService NavigationService { get; }  = new NavigationService();
-        public static IPieDataService PieDataServie { get; set; } 
+
+        public static IPieDataService PieDataServie { get; set; } = new AdvancedPieDataService(new AdvancedPieRepository());
 
         public App()
         {

@@ -7,7 +7,7 @@ namespace BethanysPieShopStockApp.Services
 {
     public interface IPieDataService
     {
-        Task<List<Pie>> GetAllPiesAsync();
+        Task<List<Pie>> GetAllPiesAsync(bool force);
         Task AddPieAsync(Pie pie);
         Task UpdatePieAsync(Pie pie);
         Task DeletePieAsync(Guid id);

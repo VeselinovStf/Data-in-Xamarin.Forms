@@ -47,7 +47,7 @@ namespace BethanysPieShopStockApp.ViewModels
 
         public async void OnLoadCommand()
         {
-            Pies = new ObservableCollection<Pie>(await _pieDataService.GetAllPiesAsync());
+            Pies = new ObservableCollection<Pie>(await _pieDataService.GetAllPiesAsync(false));
         }
 
         private void OnPieSelectedCommand(Pie pie)
@@ -62,7 +62,7 @@ namespace BethanysPieShopStockApp.ViewModels
 
         private async void OnPieChanged(PieDetailViewModel sender, Pie pie)
         {
-            Pies = new ObservableCollection<Pie>(await _pieDataService.GetAllPiesAsync());
+            Pies = new ObservableCollection<Pie>(await _pieDataService.GetAllPiesAsync(true));
         }
     }
 }
