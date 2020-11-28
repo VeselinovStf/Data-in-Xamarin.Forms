@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="BethanysPieShopStock.Services.WcfService.PieWcfService" CodeBehind="PieWcfService.svc.cs" %>
