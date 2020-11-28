@@ -68,7 +68,7 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="PieRepository.cs" />
+    <Compile Include="LegacyPieRepository.cs" />
     <Compile Include="Web References\BethanysPieShopRemoteServices\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

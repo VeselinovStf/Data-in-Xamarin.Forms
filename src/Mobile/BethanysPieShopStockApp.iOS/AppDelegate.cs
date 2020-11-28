@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BethanysPieShopStockApp.Models;
 using BethanysPieShopStockApp.Services;
 using Foundation;
 using UIKit;
@@ -23,6 +24,7 @@ namespace BethanysPieShopStockApp.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            //App.PieDataServie = new PieDataService(new LegacyPieRepository());
             App.PieDataServie = new PieDataService(new PieRepository());
 
             LoadApplication(new App());

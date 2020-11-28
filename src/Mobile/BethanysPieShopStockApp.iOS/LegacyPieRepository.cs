@@ -7,7 +7,7 @@ using BethanysPieShopStockApp.Services;
 
 namespace BethanysPieShopStockApp.iOS
 {
-    public class PieRepository : IPieRepository
+    public class LegacyPieRepository : IPieRepository
     {
         BethanysPieShopRemoteServices.PieAsmxService _pieAsmxService;
         TaskCompletionSource<bool> getAllPiesRequestComplete = null;
@@ -19,7 +19,7 @@ namespace BethanysPieShopStockApp.iOS
         public List<Pie> Pies { get; private set; } = new List<Pie>();
         public Pie Pie { get; set; }
 
-        public PieRepository()
+        public LegacyPieRepository()
         {
             _pieAsmxService = new BethanysPieShopRemoteServices.PieAsmxService
             {

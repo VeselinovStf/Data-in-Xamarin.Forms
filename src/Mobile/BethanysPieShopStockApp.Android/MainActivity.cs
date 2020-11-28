@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using BethanysPieShopStockApp.Services;
+using BethanysPieShopStockApp.Models;
 
 namespace BethanysPieShopStockApp.Droid
 {
@@ -23,6 +24,7 @@ namespace BethanysPieShopStockApp.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
+            //App.PieDataServie = new PieDataService(new LegacyPieRepository());
             App.PieDataServie = new PieDataService(new PieRepository());
 
             LoadApplication(new App());
