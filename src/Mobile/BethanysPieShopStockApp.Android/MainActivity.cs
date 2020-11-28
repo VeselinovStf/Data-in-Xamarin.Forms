@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 using BethanysPieShopStockApp.Services;
 using BethanysPieShopStockApp.Models;
+using Acr.UserDialogs;
 
 namespace BethanysPieShopStockApp.Droid
 {
@@ -20,6 +21,7 @@ namespace BethanysPieShopStockApp.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            UserDialogs.Init(this);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);

@@ -14,7 +14,8 @@ namespace BethanysPieShopStockApp.ViewModels
 
         private IPieDataService _pieDataService;
         private INavigationService _navigationService;
-        
+        private readonly IDialogService _dialogService;
+
         public ObservableCollection<Pie> Pies
         {
             get => _pies;
@@ -26,11 +27,11 @@ namespace BethanysPieShopStockApp.ViewModels
         }
 
 
-        public PieOverviewViewModel(IPieDataService pieDataService, INavigationService navigationService)
+        public PieOverviewViewModel(IPieDataService pieDataService, INavigationService navigationService, IDialogService dialogService)
         {
             _pieDataService = pieDataService;
             _navigationService = navigationService;
-
+            _dialogService = dialogService;
             LoadCommand = new Command(OnLoadCommand);
             AddCommand = new Command(OnAddCommand);
             PieSelectedCommand = new Command<Pie>(OnPieSelectedCommand);
@@ -47,7 +48,16 @@ namespace BethanysPieShopStockApp.ViewModels
 
         public async void OnLoadCommand()
         {
-            Pies = new ObservableCollection<Pie>(await _pieDataService.GetAllPiesAsync(false));
+            try
+            {
+                Pies = new ObservableCollection<Pie>(await _pieDataService.GetAllPiesAsync(false));
+            }
+            catch (System.Exception ex)
+            {
+
+                await _dialogService.ShowDialog("Error accues!", "Error", "Ok");
+            }
+            
         }
 
         private void OnPieSelectedCommand(Pie pie)

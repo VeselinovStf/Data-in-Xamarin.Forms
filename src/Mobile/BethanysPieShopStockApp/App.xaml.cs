@@ -11,6 +11,7 @@ namespace BethanysPieShopStockApp
         public static NavigationService NavigationService { get; }  = new NavigationService();
 
         public static IPieDataService PieDataServie { get; set; } = new AdvancedPieDataService(new AdvancedPieRepository());
+        public static IDialogService DialogService { get; set; } = new DialogService();
 
         public App()
         {
