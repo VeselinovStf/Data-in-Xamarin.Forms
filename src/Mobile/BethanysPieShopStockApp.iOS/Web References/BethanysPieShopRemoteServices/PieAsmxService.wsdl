@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://microsoft.com/wsdl/types/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:import namespace="http://microsoft.com/wsdl/types/" />
+      <s:element name="GetAllPies">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetAllPiesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllPiesResult" type="tns:ArrayOfPie" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfPie">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Pie" nillable="true" type="tns:Pie" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Pie">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s1:guid" />
+          <s:element minOccurs="0" maxOccurs="1" name="PieName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Price" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="ImageUrl" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="InStock" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetPieById">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s1:guid" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPieByIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPieByIdResult" type="tns:Pie" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddPie">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pie" type="tns:Pie" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddPieResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="UpdatePie">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pie" type="tns:Pie" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdatePieResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="DeletePie">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s1:guid" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeletePieResponse">
+        <s:complexType />
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/wsdl/types/">
+      <s:simpleType name="guid">
+        <s:restriction base="s:string">
+          <s:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetAllPiesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllPies" />
+  </wsdl:message>
+  <wsdl:message name="GetAllPiesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllPiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPieByIdSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPieById" />
+  </wsdl:message>
+  <wsdl:message name="GetPieByIdSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPieByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddPieSoapIn">
+    <wsdl:part name="parameters" element="tns:AddPie" />
+  </wsdl:message>
+  <wsdl:message name="AddPieSoapOut">
+    <wsdl:part name="parameters" element="tns:AddPieResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePieSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdatePie" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePieSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdatePieResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeletePieSoapIn">
+    <wsdl:part name="parameters" element="tns:DeletePie" />
+  </wsdl:message>
+  <wsdl:message name="DeletePieSoapOut">
+    <wsdl:part name="parameters" element="tns:DeletePieResponse" />
+  </wsdl:message>
+  <wsdl:portType name="PieAsmxServiceSoap">
+    <wsdl:operation name="GetAllPies">
+      <wsdl:input message="tns:GetAllPiesSoapIn" />
+      <wsdl:output message="tns:GetAllPiesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPieById">
+      <wsdl:input message="tns:GetPieByIdSoapIn" />
+      <wsdl:output message="tns:GetPieByIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddPie">
+      <wsdl:input message="tns:AddPieSoapIn" />
+      <wsdl:output message="tns:AddPieSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePie">
+      <wsdl:input message="tns:UpdatePieSoapIn" />
+      <wsdl:output message="tns:UpdatePieSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePie">
+      <wsdl:input message="tns:DeletePieSoapIn" />
+      <wsdl:output message="tns:DeletePieSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PieAsmxServiceSoap" type="tns:PieAsmxServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAllPies">
+      <soap:operation soapAction="http://tempuri.org/GetAllPies" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPieById">
+      <soap:operation soapAction="http://tempuri.org/GetPieById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddPie">
+      <soap:operation soapAction="http://tempuri.org/AddPie" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePie">
+      <soap:operation soapAction="http://tempuri.org/UpdatePie" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletePie">
+      <soap:operation soapAction="http://tempuri.org/DeletePie" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PieAsmxServiceSoap12" type="tns:PieAsmxServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAllPies">
+      <soap12:operation soapAction="http://tempuri.org/GetAllPies" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPieById">
+      <soap12:operation soapAction="http://tempuri.org/GetPieById" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddPie">
+      <soap12:operation soapAction="http://tempuri.org/AddPie" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePie">
+      <soap12:operation soapAction="http://tempuri.org/UpdatePie" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletePie">
+      <soap12:operation soapAction="http://tempuri.org/DeletePie" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PieAsmxService">
+    <wsdl:port name="PieAsmxServiceSoap" binding="tns:PieAsmxServiceSoap">
+      <soap:address location="https://bethanyspieshopstockappasmxservice.azurewebsites.net/PieAsmxService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PieAsmxServiceSoap12" binding="tns:PieAsmxServiceSoap12">
+      <soap12:address location="https://bethanyspieshopstockappasmxservice.azurewebsites.net/PieAsmxService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
