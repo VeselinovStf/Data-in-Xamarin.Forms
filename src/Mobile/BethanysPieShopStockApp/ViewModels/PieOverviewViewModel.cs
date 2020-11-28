@@ -4,6 +4,7 @@ using System.Windows.Input;
 using BethanysPieShopStockApp.Models;
 using BethanysPieShopStockApp.Services;
 using BethanysPieShopStockApp.Utility;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace BethanysPieShopStockApp.ViewModels
@@ -48,16 +49,27 @@ namespace BethanysPieShopStockApp.ViewModels
 
         public async void OnLoadCommand()
         {
-            try
-            {
-                Pies = new ObservableCollection<Pie>(await _pieDataService.GetAllPiesAsync(false));
-            }
-            catch (System.Exception ex)
-            {
+            var networkConnection = Connectivity.NetworkAccess;
 
-                await _dialogService.ShowDialog("Error accues!", "Error", "Ok");
+            if (networkConnection != NetworkAccess.None)
+            {
+                try
+                {
+                    Pies = new ObservableCollection<Pie>(await _pieDataService.GetAllPiesAsync(false));
+                }
+                catch (System.Exception ex)
+                {
+
+                    await _dialogService.ShowDialog("Error accues!", "Error", "Ok");
+                }
+
             }
-            
+            else
+            {
+                await _dialogService.ShowDialog("Connection Error", "No active internet connection", "Ok");
+            }
+
+
         }
 
         private void OnPieSelectedCommand(Pie pie)
