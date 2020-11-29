@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Plugin.Connectivity;
 using SalesApp.Database;
+using System.Linq;
+using Xamarin.Essentials;
 
 namespace SalesApp.Services.Address
 {
@@ -70,26 +72,35 @@ namespace SalesApp.Services.Address
             simulateNetworkException();
 
             List<Models.Address> output = new List<Models.Address>();
-            if (cacheExpires == null || cacheExpires.Value < DateTime.Now.AddMinutes(-1))
+            if (Connectivity.NetworkAccess == NetworkAccess.None)
             {
-                cacheExpires = DateTime.Now.AddMinutes(1);
-                output = GetFakeAddresses();
-
-                foreach (var address in output)
+                return _localDb.GetAllAddresses();
+            }
+            else
+            {
+                if (cacheExpires == null || cacheExpires.Value < DateTime.Now.AddMinutes(-1))
                 {
-                    _localDb.UpsertAddress(address);
+                    cacheExpires = DateTime.Now.AddMinutes(1);
+                    output = GetFakeAddresses();
+
+                    foreach (var address in output)
+                    {
+                        _localDb.UpsertAddress(address);
+                    }
+
+                    return output;
                 }
 
-                return output;
+                await Task.Delay(2000);
+
+                return _localDb.GetAllAddresses();
             }
-
-            await Task.Delay(2000);
-
-            return _localDb.GetAllAddresses();
+            
         }
 
         private List<Models.Address> GetFakeAddresses()
         {
+
             return new List<Models.Address>()
             {
                 new Models.Address
@@ -159,46 +170,34 @@ namespace SalesApp.Services.Address
 
         public async Task<AddressBuckets> GetAddressBucketsAsync(string zip)
         {
-            simulateNetworkException();
-
-            await Task.Delay(1000);
-
-            return new AddressBuckets()
+            List<Models.Address> addresses = new List<Models.Address>();
+            if (Connectivity.NetworkAccess == NetworkAccess.None)
             {
-                Addresses = new List<Models.Address>
+                addresses = _localDb.GetAllAddresses();
+            }
+            else
+            {
+                if (cacheExpires == null || cacheExpires.Value < DateTime.Now.AddMinutes(-1))
                 {
-                    new Models.Address
-                    {
-                        Id=1,
-                        City = "Pittsburg",
-                        Address1 = "100 South Olive",
-                        Province = "KS",
-                        PostalCode = "66762",
-                        Latitude = 37.405076,
-                        Longitude = -94.709497
-                    }
-                },
-                Interactions = new List<Models.UserAddressInteraction>
-                {
+                    cacheExpires = DateTime.Now.AddMinutes(1);
+                    addresses = GetFakeAddresses();
 
-                },
-                Sales = new List<Models.Address>
-                {
-                    new Models.Address
+                    foreach (var address in addresses)
                     {
-                        Id=1,
-                        City = "Pittsburg",
-                        Address1 = "100 South Olive",
-                        Province = "KS",
-                        PostalCode = "66762",
-                        Latitude = 37.405076,
-                        Longitude = -94.709497
+                        _localDb.UpsertAddress(address);
                     }
-                },
-                Promising = new List<Models.Address>
-                {
+
 
                 }
+                else
+                {
+                    addresses = _localDb.GetAllAddresses();
+                }
+            }
+           
+            return new AddressBuckets()
+            {
+                Addresses = addresses.ToList(),               
             };
         }
 
