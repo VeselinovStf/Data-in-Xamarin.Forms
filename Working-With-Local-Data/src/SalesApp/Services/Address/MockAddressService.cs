@@ -3,11 +3,20 @@ using SalesApp.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Plugin.Connectivity;
+using SalesApp.Database;
 
 namespace SalesApp.Services.Address
 {
     public class MockAddressService : IAddressService
     {
+        private readonly ILocalDbService _localDb;
+        private DateTime? cacheExpires = null;
+
+        public MockAddressService(ILocalDbService localDb)
+        {
+            _localDb = localDb;
+        }
+
         public async Task<CurrentLocation> GetAssignedLocationAsync(User user)
         {
             simulateNetworkException();
@@ -60,9 +69,28 @@ namespace SalesApp.Services.Address
         {
             simulateNetworkException();
 
+            List<Models.Address> output = new List<Models.Address>();
+            if (cacheExpires == null || cacheExpires.Value < DateTime.Now.AddMinutes(-1))
+            {
+                cacheExpires = DateTime.Now.AddMinutes(1);
+                output = GetFakeAddresses();
+
+                foreach (var address in output)
+                {
+                    _localDb.UpsertAddress(address);
+                }
+
+                return output;
+            }
+
             await Task.Delay(2000);
 
-            List<Models.Address> output = new List<Models.Address>()
+            return _localDb.GetAllAddresses();
+        }
+
+        private List<Models.Address> GetFakeAddresses()
+        {
+            return new List<Models.Address>()
             {
                 new Models.Address
                 {
@@ -109,8 +137,6 @@ namespace SalesApp.Services.Address
                     AddressStatus = new AddressStatus { Description = "Not Visited", Icon = "ic_info_outline_blue.png", Name = "Not Visited" }
                 }
             };
-
-            return output;
         }
 
         public async Task<Models.Address> GetAddressInfoAsync(long id)

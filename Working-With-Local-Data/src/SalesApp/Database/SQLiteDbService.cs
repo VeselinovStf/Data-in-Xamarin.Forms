@@ -1,6 +1,7 @@
 ﻿using SalesApp.Models;
 using SQLite;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SalesApp.Database
@@ -37,6 +38,17 @@ namespace SalesApp.Database
             }
 
             _database.CreateTable<User>();
+            _database.CreateTable<Address>();
+        }
+
+        public List<Address> GetAllAddresses()
+        {
+            return _database.Table<Address>().ToList();
+        }
+
+        public void UpsertAddress(Address address)
+        {
+            _database.InsertOrReplace(address);
         }
     }
 }

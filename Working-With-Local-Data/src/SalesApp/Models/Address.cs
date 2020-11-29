@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace SalesApp.Models
 {
     public class Address : ModelBase
     {
+        [PrimaryKey]
         public long Id { get; set; }
         public string AddressHash { get; set; }
 
@@ -24,6 +26,8 @@ namespace SalesApp.Models
         public string Note { get; set; }
 
         public long? AddressStatusId { get; set; }
+
+        [Ignore]
         public AddressStatus AddressStatus { get; set; }
 
         public string StatusDisplay
@@ -68,6 +72,7 @@ namespace SalesApp.Models
             }
         }
 
+        [Ignore]
         public List<UserAddressInteraction> UserAddressInteractions { get; set; }
 
         public string LastInteraction

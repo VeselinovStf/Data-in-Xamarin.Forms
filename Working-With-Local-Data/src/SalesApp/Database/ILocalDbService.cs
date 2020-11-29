@@ -1,4 +1,5 @@
 ﻿using SalesApp.Models;
+using System.Collections.Generic;
 
 namespace SalesApp.Database
 {
@@ -9,5 +10,8 @@ namespace SalesApp.Database
         void CreateUser(User user);
         User GetUser();
         void DeleteUser();
+
+        void UpsertAddress(Address address);
+        List<Address> GetAllAddresses();
     }
 }
