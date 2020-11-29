@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using SalesApp.LocalData;
 using SalesApp.ViewModels;
 using SalesApp.ViewModels.Base;
 using SalesApp.Views;
@@ -13,6 +15,7 @@ namespace SalesApp.Services.Navigation
 {
     public class NavigationService : INavigationService
     {
+        private readonly IUserService _userService;
 
         private List<Page> _backStack
         {
@@ -44,15 +47,39 @@ namespace SalesApp.Services.Navigation
             }
         }
 
-        public NavigationService()
+        public NavigationService(IUserService userService)
         {
+            _userService = userService;
         }
 
         public Task InitializeAsync()
         {
             if (Globals.LoggedInUser == null)
             {
-                return NavigateToAsync<LoginViewModel>();
+                //Read User token from local storage - LocalApplicationData
+                var storeFilePath = FileNames.TOKEN_FILE_PATH;
+
+                if (File.Exists(storeFilePath))
+                {
+                    string token = File.ReadAllText(storeFilePath);
+                    var user = _userService.GetUser(token).Result;
+                    if (user != null)
+                    {
+                        Globals.LoggedInUser = user;
+                        App.Current.MainPage = new MainView();
+                        return NavigateToAsync<DashboardViewModel>();
+                    }
+                    else
+                    {
+                        return NavigateToAsync<LoginViewModel>();
+                    }
+                    
+                }
+                else
+                {
+                    return NavigateToAsync<LoginViewModel>();
+                }
+                
             }
             else
             {

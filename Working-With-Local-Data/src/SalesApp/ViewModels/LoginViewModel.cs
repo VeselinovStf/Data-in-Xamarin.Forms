@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using SalesApp.LocalData;
 using SalesApp.Models;
 using SalesApp.Services.Authentication;
 using SalesApp.ViewModels.Base;
@@ -90,12 +92,25 @@ namespace SalesApp.ViewModels
             {
                 Globals.LoggedInUser = user;
 
+                StoreUserLocal(user.Token);
+
                 App.Current.MainPage = new MainView();
 
                 await NavigationService.NavigateToAsync<DashboardViewModel>();
 
                 await NavigationService.RemoveLastFromBackStackAsync();
             }
+        }
+
+        /// <summary>
+        /// Write user token to Local storage - LocalApplicationData
+        /// </summary>
+        /// <param name="token"></param>
+        private void StoreUserLocal(string token)
+        {
+            var storeFilePath = FileNames.TOKEN_FILE_PATH;
+
+            File.WriteAllText(storeFilePath, token);
         }
     }
 }

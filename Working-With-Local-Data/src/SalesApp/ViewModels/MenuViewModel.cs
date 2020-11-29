@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
 using System.Windows.Input;
+using SalesApp.LocalData;
 using SalesApp.Models;
 using SalesApp.Services.Enums;
 using SalesApp.ViewModels.Base;
@@ -90,6 +92,14 @@ namespace SalesApp.ViewModels
         private async void LogoutAsync()
         {
             Globals.LoggedInUser = null;
+
+            //Removing Local Stored Token on LogOut
+            var storeFilePath = FileNames.TOKEN_FILE_PATH;
+
+            if (File.Exists(storeFilePath))
+            {
+                File.Delete(storeFilePath);
+            }
 
             await NavigationService.NavigateToAsync<LoginViewModel>();
             await NavigationService.RemoveBackStackAsync();

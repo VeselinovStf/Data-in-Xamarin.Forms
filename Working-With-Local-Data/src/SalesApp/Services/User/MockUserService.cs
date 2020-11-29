@@ -7,8 +7,9 @@ namespace SalesApp.Services
     {
         public async Task<User> GetUser(string token)
         {
-            await Task.Delay(1000);
-            return new User()
+            //await Task.Delay(1000);
+            //Changing starter implementation to look more real
+            var user =  new User()
             {
                 Email = "john@test.com",
                 FirstName = "John",
@@ -16,6 +17,13 @@ namespace SalesApp.Services
                 Token = "38259836-F79C-4913-BC20-B5B9457E35FE",
                 AgentID = "2452524"
             };
+
+            if (user.Token.Equals(token))
+            {
+                return user;
+            }
+
+            return null;
         }
     }
 }
