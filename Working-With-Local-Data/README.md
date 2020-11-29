@@ -25,5 +25,6 @@ Pluralsight "Working with Local Data in Xamarin.Forms" course repository
 
 ## Status
 
+- Complete
 
 
