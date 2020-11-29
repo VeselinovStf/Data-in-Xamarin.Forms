@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using SalesApp.Database;
 using SalesApp.LocalData;
+using SalesApp.Models;
 using SalesApp.ViewModels;
 using SalesApp.ViewModels.Base;
 using SalesApp.Views;
@@ -16,6 +18,7 @@ namespace SalesApp.Services.Navigation
 {
     public class NavigationService : INavigationService
     {
+        private readonly ILocalDbService _dbService;
         private readonly IUserService _userService;
 
         private List<Page> _backStack
@@ -36,8 +39,6 @@ namespace SalesApp.Services.Navigation
             }
         }
 
-
-
         public ViewModelBase PreviousPageViewModel
         {
             get
@@ -48,8 +49,11 @@ namespace SalesApp.Services.Navigation
             }
         }
 
-        public NavigationService(IUserService userService)
+        public NavigationService(
+            ILocalDbService dbService,
+            IUserService userService)
         {
+            _dbService = dbService;
             _userService = userService;
         }
 
@@ -62,13 +66,33 @@ namespace SalesApp.Services.Navigation
                 //return result;
 
                 //Read User token from local preferences - LocalApplicationData
-                var result = CheckLocalPrederencesStoredUser();
+                //var result = CheckLocalPrederencesStoredUser();
+                //return result;
+
+                //Use SQLite
+                var result = GetUserFromLocalDb();
                 return result;
             }
             else
             {
                 App.Current.MainPage = new MainView();
                 return NavigateToAsync<DashboardViewModel>();
+            }
+        }
+
+        private Task GetUserFromLocalDb()
+        {
+            User user = _dbService.GetUser();
+
+            if (user != null)
+            {
+                Globals.LoggedInUser = user;
+                App.Current.MainPage = new MainView();
+                return NavigateToAsync<DashboardViewModel>();
+            }
+            else
+            {
+                return NavigateToAsync<LoginViewModel>();
             }
         }
 

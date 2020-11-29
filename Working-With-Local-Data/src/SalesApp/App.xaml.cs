@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SalesApp.Database;
 using SalesApp.Services.Authentication;
 using SalesApp.Services.Navigation;
 using SalesApp.ViewModels.Base;
@@ -25,6 +26,9 @@ namespace SalesApp
 	    {
 	        if (Globals.UseMocks)
 	            ViewModelLocator.UpdateDependencies(Globals.UseMocks);
+
+			var databaseService = ViewModelLocator.Resolve<ILocalDbService>();
+			databaseService.Initialize();
 	    }
 
 	    private Task InitNavigation()

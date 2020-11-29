@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using SalesApp.Database;
 using SalesApp.LocalData;
 using SalesApp.Models;
 using SalesApp.Services.Authentication;
@@ -16,6 +17,7 @@ namespace SalesApp.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
+        private readonly ILocalDbService _dbService;
         private IAuthenticationService _authenticationService;
         private string _emailAddress;
         public string EmailAddress
@@ -54,8 +56,11 @@ namespace SalesApp.ViewModels
         public ICommand SignInCommand => new Command(async () => await SignInAsync());
 
 
-        public LoginViewModel(IAuthenticationService authenticationService)
+        public LoginViewModel(
+            ILocalDbService dbService,
+            IAuthenticationService authenticationService)
         {
+            _dbService = dbService;
             _authenticationService = authenticationService;
         }
 
@@ -94,7 +99,8 @@ namespace SalesApp.ViewModels
                 Globals.LoggedInUser = user;
 
                 //StoreUserLocal(user.Token);
-                StoreUserLocalPreferencess(user.Token);
+                //StoreUserLocalPreferencess(user.Token);
+                _dbService.CreateUser(user);
 
                 App.Current.MainPage = new MainView();
 

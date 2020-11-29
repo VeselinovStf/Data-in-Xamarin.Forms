@@ -11,6 +11,7 @@ using SalesApp.Services;
 using SalesApp.Services.Zones;
 using TinyIoC;
 using Xamarin.Forms;
+using SalesApp.Database;
 
 namespace SalesApp.ViewModels.Base
 {
@@ -50,6 +51,7 @@ namespace SalesApp.ViewModels.Base
             _container.Register<INavigationService, NavigationService>();
             _container.Register<IDialogService, DialogService>();
             _container.Register<IRequestProvider, RequestProvider>();
+            _container.Register<ILocalDbService, SQLiteDbService>(); 
         }
 
         // this method could be used to setup mocks if needed

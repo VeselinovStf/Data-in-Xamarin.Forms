@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Windows.Input;
+using SalesApp.Database;
 using SalesApp.LocalData;
 using SalesApp.Models;
 using SalesApp.Services.Enums;
@@ -33,6 +34,8 @@ namespace SalesApp.ViewModels
 
 
         User _currentUser;
+        private readonly ILocalDbService _dbService;
+
         public User CurrentUser
         {
             get => _currentUser;
@@ -44,11 +47,13 @@ namespace SalesApp.ViewModels
         }
         
 
-        public MenuViewModel()
+        public MenuViewModel(
+            ILocalDbService dbService)
         {
             CurrentUser = Globals.LoggedInUser;
 
             InitMenuItems();
+            _dbService = dbService;
         }
 
 
@@ -98,11 +103,18 @@ namespace SalesApp.ViewModels
             //RemoveLocalStoredToken();
 
             //Removing Preferences Stored Token on LogOut
-            RemovePreferencesStoredToken();
-           
+            //RemovePreferencesStoredToken();
+
+            //SQLite
+            RemoveUserFromLocalDb();
 
             await NavigationService.NavigateToAsync<LoginViewModel>();
             await NavigationService.RemoveBackStackAsync();
+        }
+
+        private void RemoveUserFromLocalDb()
+        {
+            _dbService.DeleteUser();
         }
 
         private void RemovePreferencesStoredToken()
