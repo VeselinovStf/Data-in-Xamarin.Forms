@@ -9,6 +9,7 @@ using SalesApp.Models;
 using SalesApp.Services.Authentication;
 using SalesApp.ViewModels.Base;
 using SalesApp.Views;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace SalesApp.ViewModels
@@ -92,7 +93,8 @@ namespace SalesApp.ViewModels
             {
                 Globals.LoggedInUser = user;
 
-                StoreUserLocal(user.Token);
+                //StoreUserLocal(user.Token);
+                StoreUserLocalPreferencess(user.Token);
 
                 App.Current.MainPage = new MainView();
 
@@ -100,6 +102,11 @@ namespace SalesApp.ViewModels
 
                 await NavigationService.RemoveLastFromBackStackAsync();
             }
+        }
+
+        private void StoreUserLocalPreferencess(string token)
+        {
+            Preferences.Set(PreferenceKeys.USER_TOKEN, token);
         }
 
         /// <summary>

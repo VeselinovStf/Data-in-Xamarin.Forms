@@ -9,6 +9,7 @@ using SalesApp.LocalData;
 using SalesApp.ViewModels;
 using SalesApp.ViewModels.Base;
 using SalesApp.Views;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace SalesApp.Services.Navigation
@@ -57,34 +58,67 @@ namespace SalesApp.Services.Navigation
             if (Globals.LoggedInUser == null)
             {
                 //Read User token from local storage - LocalApplicationData
-                var storeFilePath = FileNames.TOKEN_FILE_PATH;
+                //var result = CheckLocalStoredUser();
+                //return result;
 
-                if (File.Exists(storeFilePath))
-                {
-                    string token = File.ReadAllText(storeFilePath);
-                    var user = _userService.GetUser(token).Result;
-                    if (user != null)
-                    {
-                        Globals.LoggedInUser = user;
-                        App.Current.MainPage = new MainView();
-                        return NavigateToAsync<DashboardViewModel>();
-                    }
-                    else
-                    {
-                        return NavigateToAsync<LoginViewModel>();
-                    }
-                    
-                }
-                else
-                {
-                    return NavigateToAsync<LoginViewModel>();
-                }
-                
+                //Read User token from local preferences - LocalApplicationData
+                var result = CheckLocalPrederencesStoredUser();
+                return result;
             }
             else
             {
                 App.Current.MainPage = new MainView();
                 return NavigateToAsync<DashboardViewModel>();
+            }
+        }
+
+        private Task CheckLocalPrederencesStoredUser()
+        {
+            var token = Preferences.Get(PreferenceKeys.USER_TOKEN, string.Empty);
+
+            if (token.Equals(string.Empty))
+            {
+                return NavigateToAsync<LoginViewModel>();
+            }
+            else
+            {
+                var user = _userService.GetUser(token).Result;
+                if (user != null)
+                {
+                    Globals.LoggedInUser = user;
+                    App.Current.MainPage = new MainView();
+                    return NavigateToAsync<DashboardViewModel>();
+                }
+                else
+                {
+                    return NavigateToAsync<LoginViewModel>();
+                }
+            }
+        }
+
+        private Task CheckLocalStoredUser()
+        {
+            var storeFilePath = FileNames.TOKEN_FILE_PATH;
+
+            if (File.Exists(storeFilePath))
+            {
+                string token = File.ReadAllText(storeFilePath);
+                var user = _userService.GetUser(token).Result;
+                if (user != null)
+                {
+                    Globals.LoggedInUser = user;
+                    App.Current.MainPage = new MainView();
+                    return NavigateToAsync<DashboardViewModel>();
+                }
+                else
+                {
+                    return NavigateToAsync<LoginViewModel>();
+                }
+
+            }
+            else
+            {
+                return NavigateToAsync<LoginViewModel>();
             }
         }
 

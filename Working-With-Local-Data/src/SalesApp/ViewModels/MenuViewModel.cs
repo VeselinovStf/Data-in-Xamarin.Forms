@@ -8,6 +8,7 @@ using SalesApp.LocalData;
 using SalesApp.Models;
 using SalesApp.Services.Enums;
 using SalesApp.ViewModels.Base;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using MenuItem = SalesApp.Models.MenuItem;
 
@@ -94,15 +95,29 @@ namespace SalesApp.ViewModels
             Globals.LoggedInUser = null;
 
             //Removing Local Stored Token on LogOut
+            //RemoveLocalStoredToken();
+
+            //Removing Preferences Stored Token on LogOut
+            RemovePreferencesStoredToken();
+           
+
+            await NavigationService.NavigateToAsync<LoginViewModel>();
+            await NavigationService.RemoveBackStackAsync();
+        }
+
+        private void RemovePreferencesStoredToken()
+        {
+            Preferences.Remove(PreferenceKeys.USER_TOKEN);
+        }
+
+        private void RemoveLocalStoredToken()
+        {
             var storeFilePath = FileNames.TOKEN_FILE_PATH;
 
             if (File.Exists(storeFilePath))
             {
                 File.Delete(storeFilePath);
             }
-
-            await NavigationService.NavigateToAsync<LoginViewModel>();
-            await NavigationService.RemoveBackStackAsync();
         }
     }
 }
